@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Catering Management System">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar">
+
+            <div class="logo">
+               <h2>STARTER STATION<span>.</span></h2>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="packages.html">Packages</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <a href="booking.html" class="btn">Book Now</a>
+
+        </nav>
+    </header>
+
+
+    <section class="page-banner">
+        <div>
+            <p>SECURE PAYMENT</p>
+            <h1>Payment</h1>
+            <span>Home / Payment</span>
+        </div>
+    </section>
+
+
+    <section class="payment-section">
+
+        <div class="section-title">
+            <p>PAYMENT DETAILS</p>
+            <h2>Complete Your Payment</h2>
+        </div>
+
+        <div class="payment-container">
+
+            
+            <div class="payment-summary">
+
+                <h2>Booking Summary</h2>
+
+                <div class="summary-item">
+                    <span>Customer Name</span>
+                    <strong>Customer</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>Booking ID</span>
+                    <strong>CMS001</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>Selected Package</span>
+                    <strong>Standard Package</strong>
+                </div>
+
+                <div class="summary-item">
+                    <span>Number of Guests</span>
+                    <strong>50</strong>
+                </div>
+
+                <div class="summary-total">
+                    <span>Total Amount</span>
+                    <strong>₹39,950</strong>
+                </div>
+
+            </div>
+
+
+            <div class="payment-form">
+
+                <h2>Choose Payment Method</h2>
+
+                <form id="paymentForm">
+
+                    <div class="payment-methods">
+
+                        <label>
+                            <input type="radio"
+                                   name="payment"
+                                   value="upi"
+                                   checked>
+                            UPI
+                        </label>
+
+                        <label>
+                            <input type="radio"
+                                   name="payment"
+                                   value="card">
+                            Card
+                        </label>
+
+                    </div>
+
+
+                
+                    <div class="form-group">
+
+                        <label for="upi">
+                            UPI ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="upi"
+                            placeholder="example@upi"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Name on Payment
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit" class="btn">
+                        Pay Now
+                    </button>
+
+                </form>
+
+
+    
+                <p id="paymentSuccess">
+                    🎉 Payment Successful! Your booking has been confirmed.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+
+        <div class="footer-content">
+
+            <div>
+                <h2>STARTER STATION<span>.</span></h2>
+
+                <p>
+                    Delicious food and professional catering
+                    for your memorable events.
+                </p>
+            </div>
+
+
+            <div>
+
+                <h3>Quick Links</h3>
+
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="menu.html">Menu</a>
+                <a href="services.html">Services</a>
+                <a href="packages.html">Packages</a>
+                <a href="contact.html">Contact</a>
+
+            </div>
+
+
+            <div>
+
+                <h3>STARTER STATION</h3>
+
+                <p>📞 +91 7020479686</p>
+                <p>✉️ sadiqsayyed48@gmail.com</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+
+            <p>
+                © 2026 Catering Management System.
+                All Rights Reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="js/script.js"></script>
+    <script>
+
+        document.getElementById("paymentForm")
+        .addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            document.getElementById("paymentSuccess")
+            .style.display = "block";
+
+            this.reset();
+
+        });
+
+    </script>
+
+</body>
+</html>
