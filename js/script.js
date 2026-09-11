@@ -168,20 +168,18 @@ if (loginForm) {
 
             localStorage.setItem("loggedIn", "true");
 
-            message.textContent = "Login successful!";
+            alert("Login Successful! Welcome to Catering Management System.");
 
-            setTimeout(function() {
-                window.location.href = "index.html";
-            }, 1000);
+            window.location.replace("index.html");
 
         } else {
 
-            message.textContent =
-                "Invalid email or password.";
+            message.textContent = "Invalid email or password.";
 
         }
 
     });
+
 }
 const bookingName = document.getElementById("bookingName");
 
@@ -563,3 +561,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+
+
+
+
+
