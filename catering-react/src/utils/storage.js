@@ -94,3 +94,115 @@ export const addPayment = (payment) => {
   savePayments([...payments, newPayment]);
   return newPayment;
 };
+
+// ==========================================
+// CART (plate-wise ordering)
+// ==========================================
+export const getCart = () => read("ss_cart", []);
+export const saveCart = (cart) => write("ss_cart", cart);
+
+export const addToCart = (menuItem, quantity = 1) => {
+  const cart = getCart();
+  const existing = cart.find((c) => c.menuItemId === menuItem.id);
+  let updated;
+  if (existing) {
+    updated = cart.map((c) =>
+      c.menuItemId === menuItem.id ? { ...c, quantity: c.quantity + quantity } : c
+    );
+  } else {
+    updated = [
+      ...cart,
+      {
+        menuItemId: menuItem.id,
+        name: menuItem.name,
+        price: menuItem.price,
+        image: menuItem.image,
+        quantity,
+      },
+    ];
+  }
+  saveCart(updated);
+  return updated;
+};
+
+export const updateCartQuantity = (menuItemId, quantity) => {
+  let cart = getCart();
+  if (quantity <= 0) {
+    cart = cart.filter((c) => c.menuItemId !== menuItemId);
+  } else {
+    cart = cart.map((c) => (c.menuItemId === menuItemId ? { ...c, quantity } : c));
+  }
+  saveCart(cart);
+  return cart;
+};
+
+export const removeFromCart = (menuItemId) => {
+  const cart = getCart().filter((c) => c.menuItemId !== menuItemId);
+  saveCart(cart);
+  return cart;
+};
+
+export const clearCart = () => saveCart([]);
+
+export const getCartCount = () => getCart().reduce((sum, c) => sum + c.quantity, 0);
+
+const GST_RATE = 0.05; // 5%
+
+export const getCartTotals = () => {
+  const cart = getCart();
+  const subtotal = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
+  const tax = Math.round(subtotal * GST_RATE * 100) / 100;
+  const total = Math.round((subtotal + tax) * 100) / 100;
+  return { subtotal, tax, total };
+};
+
+// ==========================================
+// ORDERS (plate-wise restaurant orders)
+// ==========================================
+export const getOrders = () => read("ss_orders", []);
+export const saveOrders = (list) => write("ss_orders", list);
+
+export const placeOrder = ({ customerId, name, phone, orderType, tableNo }) => {
+  const cart = getCart();
+  if (cart.length === 0) {
+    return { success: false, message: "Your cart is empty." };
+  }
+  if (orderType === "Dine-in" && !tableNo) {
+    return { success: false, message: "Please enter a table number." };
+  }
+
+  const { subtotal, tax, total } = getCartTotals();
+
+  const order = {
+    id: Date.now(),
+    customerId: customerId || null,
+    name,
+    phone,
+    orderType, // "Dine-in" | "Takeaway"
+    tableNo: orderType === "Dine-in" ? tableNo : null,
+    items: cart.map((c) => ({
+      menuItemId: c.menuItemId,
+      itemName: c.name,
+      price: c.price,
+      quantity: c.quantity,
+      lineTotal: Math.round(c.price * c.quantity * 100) / 100,
+    })),
+    subtotal,
+    tax,
+    total,
+    status: "Pending", // Pending | Preparing | Served | Completed | Cancelled
+    createdAt: new Date().toISOString(),
+  };
+
+  saveOrders([...getOrders(), order]);
+  clearCart();
+  return { success: true, order };
+};
+
+export const updateOrderStatus = (id, status) => {
+  const orders = getOrders().map((o) => (o.id === id ? { ...o, status } : o));
+  saveOrders(orders);
+};
+
+export const getOrdersByCustomerId = (customerId) =>
+  getOrders().filter((o) => o.customerId === customerId);

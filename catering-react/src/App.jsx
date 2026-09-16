@@ -30,6 +30,11 @@ import AdminServices from "./pages/admin/AdminServices";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminCustomers from "./pages/admin/AdminCustomers";
 
+import Cart from "./pages/Cart";
+import OrderBill from "./pages/OrderBill";
+import MyOrders from "./pages/MyOrders";
+import AdminOrders from "./pages/admin/AdminOrders";
+
 function PublicLayout({ children }) {
   return (
     <>
@@ -49,17 +54,110 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         {/* Public site */}
-        <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
-        <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
-        <Route path="/menu" element={<PublicLayout><Menu /></PublicLayout>} />
-        <Route path="/item/:id" element={<PublicLayout><ItemDetails /></PublicLayout>} />
-        <Route path="/packages" element={<PublicLayout><Packages /></PublicLayout>} />
-        <Route path="/services" element={<PublicLayout><Services /></PublicLayout>} />
-        <Route path="/booking" element={<PublicLayout><Booking /></PublicLayout>} />
-        <Route path="/confirmation" element={<PublicLayout><Confirmation /></PublicLayout>} />
-        <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
-        <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />
-        <Route path="/signup" element={<PublicLayout><Signup /></PublicLayout>} />
+        <Route
+          path="/"
+          element={
+            <PublicLayout>
+              <Home />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <PublicLayout>
+              <About />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/menu"
+          element={
+            <PublicLayout>
+              <Menu />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/item/:id"
+          element={
+            <PublicLayout>
+              <ItemDetails />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/packages"
+          element={
+            <PublicLayout>
+              <Packages />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <PublicLayout>
+              <Services />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/booking"
+          element={
+            <PublicLayout>
+              <Booking />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/confirmation"
+          element={
+            <PublicLayout>
+              <Confirmation />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <PublicLayout>
+              <Contact />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <PublicLayout>
+              <Login />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicLayout>
+              <Signup />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <PublicLayout>
+              <Cart />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/order-bill"
+          element={
+            <PublicLayout>
+              <OrderBill />
+            </PublicLayout>
+          }
+        />
 
         {/* Customer protected */}
         <Route
@@ -152,6 +250,26 @@ export default function App() {
                 <p className="text-gray-500 mt-2">Page not found</p>
               </div>
             </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/my-orders"
+          element={
+            <PublicLayout>
+              <ProtectedRoute>
+                <MyOrders />
+              </ProtectedRoute>
+            </PublicLayout>
+          }
+        />
+
+        <Route
+          path="/admin-orders"
+          element={
+            <AdminProtectedRoute>
+              <AdminOrders />
+            </AdminProtectedRoute>
           }
         />
       </Routes>

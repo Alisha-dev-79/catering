@@ -1,11 +1,23 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { getCurrentCustomer, logoutCustomer } from "../utils/storage";
+import { useState, useEffect } from "react";
+import { getCurrentCustomer, logoutCustomer, getCartCount } from "../utils/storage";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(getCartCount());
   const navigate = useNavigate();
   const customer = getCurrentCustomer();
+
+  // keep badge in sync when cart changes anywhere in the app
+  useEffect(() => {
+    const sync = () => setCartCount(getCartCount());
+    window.addEventListener("storage", sync);
+    window.addEventListener("cart-updated", sync);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("cart-updated", sync);
+    };
+  }, []);
 
   const linkClass = ({ isActive }) =>
     `px-3 py-2 text-sm font-medium transition ${
@@ -26,6 +38,21 @@ export default function Navbar() {
     { to: "/contact", label: "Contact" },
   ];
 
+  const CartIcon = () => (
+    <Link to="/cart" className="relative p-2 text-gray-700 hover:text-brand-600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+      </svg>
+      {cartCount > 0 && (
+        <span className="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+          {cartCount}
+        </span>
+      )}
+    </Link>
+  );
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
@@ -44,12 +71,13 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
+          <CartIcon />
           {customer ? (
             <>
-              <Link
-                to="/my-booking"
-                className="text-sm font-medium text-gray-700 hover:text-brand-600"
-              >
+              <Link to="/my-orders" className="text-sm font-medium text-gray-700 hover:text-brand-600">
+                My Orders
+              </Link>
+              <Link to="/my-booking" className="text-sm font-medium text-gray-700 hover:text-brand-600">
                 Hi, {customer.name.split(" ")[0]}
               </Link>
               <button
@@ -61,10 +89,7 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className="text-sm font-medium text-gray-700 hover:text-brand-600"
-              >
+              <Link to="/login" className="text-sm font-medium text-gray-700 hover:text-brand-600">
                 Login
               </Link>
               <Link
@@ -77,30 +102,28 @@ export default function Navbar() {
           )}
         </div>
 
-        <button
-          className="md:hidden text-gray-700"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeWidth="2" strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <CartIcon />
+          <button className="text-gray-700" onClick={() => setMenuOpen(!menuOpen)}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeWidth="2" strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
       </nav>
 
       {menuOpen && (
         <div className="md:hidden flex flex-col px-4 pb-4 gap-1 bg-white border-t">
           {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              onClick={() => setMenuOpen(false)}
-              className={linkClass}
-            >
+            <NavLink key={l.to} to={l.to} onClick={() => setMenuOpen(false)} className={linkClass}>
               {l.label}
             </NavLink>
           ))}
           {customer ? (
             <>
+              <Link to="/my-orders" onClick={() => setMenuOpen(false)} className="px-3 py-2 text-sm">
+                My Orders
+              </Link>
               <Link to="/my-booking" onClick={() => setMenuOpen(false)} className="px-3 py-2 text-sm">
                 My Booking
               </Link>

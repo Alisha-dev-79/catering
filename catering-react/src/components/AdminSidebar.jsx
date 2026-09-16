@@ -12,6 +12,7 @@ export default function AdminSidebar() {
     { to: "/admin-services", label: "Services", icon: "🛎️" },
     { to: "/admin-payments", label: "Payments", icon: "💳" },
     { to: "/admin-customers", label: "Customers", icon: "👥" },
+    { to: "/admin-orders", label: "Restaurant Orders", icon: "🍽️" },
   ];
 
   const handleLogout = () => {
